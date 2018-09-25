@@ -1,34 +1,39 @@
 module.exports = function countOccurences(tree) {
-  const node = JSON.parse(tree);
-  let newArr = [];
-  let newObj = {};
+  const root = JSON.parse(tree);
+  let countDict = {};
 
+  // Made a recursive function that goes through the nested object and
+  // update the count for found leaves
   function accessObj(obj) {
     for (let key of Object.keys(obj)) {
       let value = obj[key];
       if (typeof value === 'object') {
         accessObj(value);
       } else {
-        if (newObj.hasOwnProperty(key)) {
-          newObj[key] += value;
+        if (countDict.hasOwnProperty(key)) {
+          countDict[key] += value;
         } else {
-          newObj[key] = value;
+          countDict[key] = value;
         }
       }
     }
   }
 
+  // Call on the root
+  accessObj(root);
 
-  accessObj(node);
-  let max = Math.max.apply(null, Object.keys(newObj).map(function(x) {
-    return newObj[x];
-  }));
+  // Finding the max
+  const max = Math.max(...Object.values(countDict));
 
-  newArr.push(max);
+  // Finding the keys for which count === max
+  const keys = Object.keys(countDict)
+    .filter((key) => countDict[key] === max);
 
-  newArr.push(Object.keys(newObj).filter(function(x) {
-    return newObj[x] == max;
-  }));
-
-  return newArr;
+  return [max, keys];
 };
+
+
+// Possible edge cases not tested:
+// - Empty object
+// - Empty json string
+// - Malformed input json (e.g. json containing other types of data like arrays)
