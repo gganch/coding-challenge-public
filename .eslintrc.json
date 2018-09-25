@@ -1,0 +1,13 @@
+{
+    "env": {
+        "jest/globals": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": "google",
+    "plugins": ["jest"],
+    "rules": {
+        "require-jsdoc": "off",
+        "max-len": [2, 120]
+    }
+}
